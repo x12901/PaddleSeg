@@ -24,12 +24,12 @@ def parse_args():
         description=
         'PaddleSeg generate file list on cityscapes or your customized dataset.'
     )
-    parser.add_argument('dataset_root', help='dataset root directory', type=str)
+    parser.add_argument('dataset_root', help='dataset root directory', type=str, default="D:\projects\PaddleSeg\pdy")
     parser.add_argument(
         '--type',
         help='dataset type: \n'
-        '- cityscapes \n'
-        '- custom(default)',
+             '- cityscapes \n'
+             '- custom(default)',
         default="custom",
         type=str)
     parser.add_argument(
@@ -128,14 +128,17 @@ def generate_list(args):
         file_list = os.path.join(dataset_root, dataset_split + '.txt')
         with open(file_list, "w") as f:
             for item in range(num_images):
-                left = image_files[item].replace(dataset_root, '')
+                print(dataset_root)
+                print(image_files[item])
+                left = image_files[item].replace(dataset_root, '', 1)
+                print(left)
                 if left[0] == os.path.sep:
-                    left = left.lstrip(os.path.sep)
+                    left = left.lstrip(os.path.sep).replace('\\', '/')
 
                 try:
-                    right = label_files[item].replace(dataset_root, '')
+                    right = label_files[item].replace(dataset_root, '', 1)
                     if right[0] == os.path.sep:
-                        right = right.lstrip(os.path.sep)
+                        right = right.lstrip(os.path.sep).replace('\\', '/')
                     line = left + separator + right + '\n'
                 except:
                     line = left + '\n'
